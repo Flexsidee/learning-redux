@@ -31,7 +31,7 @@ const reducer = (state = initialUserState, action) => {
 				},
 			};
 		default:
-			state;
+			return state;
 	}
 };
 
@@ -42,6 +42,6 @@ const unsubscribe = store.subscribe(() =>
 	console.log("Update store", store.getState())
 );
 
-store.dispatch(updateStreet());
+store.dispatch(updateStreet("Ibefun Street"));
 
 unsubscribe();
