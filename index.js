@@ -1,8 +1,11 @@
 const redux = require("redux"); //importing redux into the application
-
 const createStore = redux.createStore; //used for createing the store
 const bindActionCreators = redux.bindActionCreators; //for binding actions
 const combineReducers = redux.combineReducers; //for combining reducers
+const applyMiddleWare = redux.applyMiddleware; //for applying middlewares
+
+const reduxLogger = require("redux-logger"); //importing the redux logger
+const logger = reduxLogger.createLogger();
 
 //list of actions currently in the app
 const CAKE_ORDERED = "CAKE_ORDERED";
@@ -10,7 +13,6 @@ const CAKE_RESTOCKED = "CAKE_RESTOCKED";
 const ICECREAM_ORDERED = "ICECREAM_ORDERED";
 const ICECREAM_RESTOCKED = "ICECREAM_RESTOCKED";
 
-//this is an action
 function orderCake() {
 	return {
 		type: CAKE_ORDERED,
@@ -38,12 +40,6 @@ function restockIceCream(qty = 1) {
 		payload: qty,
 	};
 }
-
-//this is the store for the cakes
-// const initialState = {
-// 	numOfCakes: 11,
-// 	numOfIceCreams: 20,
-// };
 
 const initialCakeState = {
 	numOfCakes: 11,
@@ -80,17 +76,16 @@ const iceCreamReducer = (state = initialIceCreamState, action) => {
 	}
 };
 
+//this comiines both reducers
 const rootReducer = combineReducers({
 	cake: cakeReducer,
 	iceCream: iceCreamReducer,
 });
 
-const store = createStore(rootReducer); //redux store is holding application state here
-console.log("Initial State", store.getState());
+const store = createStore(rootReducer, applyMiddleWare(logger)); //redux store is holding application state here + the redux logger is working
+console.log("Initial State: ", store.getState());
 
-const unsubscribe = store.subscribe(() =>
-	console.log("Update store", store.getState())
-);
+const unsubscribe = store.subscribe(() => {});
 
 const actions = bindActionCreators(
 	{ orderCake, restockCake, orderIceCream, restockIceCream },
@@ -105,12 +100,5 @@ actions.orderIceCream();
 actions.orderIceCream();
 actions.orderIceCream();
 actions.restockIceCream();
-
-// store.dispatch(orderCake());
-// store.dispatch(orderCake());
-// store.dispatch(orderCake());
-// store.dispatch(orderCake());
-// store.dispatch(restockCake(40));
-// store.dispatch(restockCake());
 
 unsubscribe();
