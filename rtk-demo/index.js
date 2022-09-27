@@ -5,7 +5,7 @@ const icecreamActions =
 
 console.log("Inital state: ", store.getState());
 const unsubscribe = store.subscribe(() => {
-	console.log("Updatate stat: ", store.getState());
+	// console.log("Updatate state: ", store.getState());
 });
 
 store.dispatch(cakeActions.ordered());
